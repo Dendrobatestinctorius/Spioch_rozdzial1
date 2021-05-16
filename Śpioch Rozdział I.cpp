@@ -11,6 +11,7 @@
 #include <windows.h>
 #include <iostream>
 #include <conio.h>
+#include <fstream>
 
 using namespace std;
 
@@ -20,12 +21,10 @@ class Postac {
 public:
 	bool aktywnaP = false;
 	bool gyce_talk = false;
-	int str = 0, con = 0, dex = 0, wis = 0;
-	int Hidden_Path = 0;
+	int Hidden_Path = 0, last_scn = 0;
 	string name;
-	int weaponstr = 5;
-	string equipmentweapon = "Pięść";
-	string equipmentarmor = "Nic";
+	string data, czas;
+	fstream myfile;
 	int randattr()
 	{
 		int attr = (rand() % 12) + 8;
@@ -34,16 +33,30 @@ public:
 	void charcr()
 	{
 		aktywnaP = true;
-		str = randattr();
-		dex = randattr();
-		con = randattr();
-		wis = randattr();
 	}
-	/*void Postac_stat()
+	void save()
 	{
-		cout << "\nAktywna postać:\nImię: " << name << "\nStatystyki:\nSiła: " << str << " Zręczność: " << dex << " Wytrzymałość: " << con << " Mądrość: " << wis << endl;
-		cout << "Wyposażenie:\nBroń: " << equipmentweapon << " +" << weaponstr << " Pancerz: " << equipmentarmor;
-	}*/
+		SYSTEMTIME lt = { 0 };
+		GetLocalTime(&lt);
+		fstream myfile;
+		myfile.open("save1.sfs");
+		myfile << lt.wHour << ":" << lt.wMinute << " " << lt.wDay << "." << lt.wMonth << "." << lt.wYear << " " << Hidden_Path << " " << last_scn;
+		myfile.close();
+	}
+	void load()
+	{
+		myfile.open("save1.sfs");
+		if (!myfile.is_open())
+			cout << "Unable to open file";
+
+		else
+		{
+			myfile >> data >> czas >> Hidden_Path >> last_scn;
+
+			myfile.close();
+		}
+	}
+
 };
 
 
@@ -324,11 +337,11 @@ bool NowaGra()
 	gotoxy(65, 14);
 	cout << "#========================#";
 	gotoxy(65, 15);
-	cout << "|    Stwórz Postać [1]   |";
+	cout << "|Rozpocznij przygodę! [1]|";
 	gotoxy(65, 16);
 	cout << "|========================|";
 	gotoxy(65, 17);
-	cout << "|Rozpocznij przygodę! [2]|";
+	cout << "|    Wczytaj zapis[2]    |";
 	gotoxy(65, 18);
 	cout << "|========================|";
 	gotoxy(65, 19);
@@ -339,35 +352,50 @@ bool NowaGra()
 		NowaGra = inpt();
 		switch (NowaGra) {
 		case 1:
-			gotoxy(65, 25);
-			cout << "                                       ";
-			player.charcr();
-			gotoxy(65, 25);
-			cout << "Podaj imie postaci: ";
-			cin >> player.name;
-			gotoxy(65, 25);
-			cout << "                                                                                    ";
-			gotoxy(65, 25);
-			cout << "Witaj " << player.name;
-			gotoxy(65, 28);
-			cout << "Możesz teraz rozpocząć przygodę!" << endl;
-			ctrl = false;
+			player.save();
+			wstep();
+			ctrl = Scena_1(player);
+			if (player.Hidden_Path == 1)
+				ctrl = Scena_3(player);
 			break;
 		case 2:
-			if (player.aktywnaP == true) {
-				wstep();
-				ctrl = Scena_1(player);
-				if (player.Hidden_Path == 1)
-					ctrl = Scena_3(player);
-				break;
+			player.load();
+			if (player.last_scn != 0) {
+				gotoxy(65, 25);
+				cout << "Dostępny zapis z: " << player.data << " " << player.czas;
+				gotoxy(65, 26);
+				cout << "kontynuować? tak[1]/nie[2]";
+				bool ctrl1 = true;
+				do {
+					int dalej = inpt();
+					switch (dalej) {
+					case 1:
+						if (player.Hidden_Path == 1) {
+							ctrl1 = Scena_3(player);
+							ctrl = ctrl1;
+						}
+						break;
+					case 2:
+						gotoxy(65, 25);
+						cout << "                                                                               ";
+						gotoxy(65, 26);
+						cout << "                                                                               ";
+						player.data = " ";
+						player.czas = " ";
+						ctrl = false;
+						break;
+					default:
+						ctrl1 = zla_opcja();
+					}
+					break;
+				} while (ctrl1 == false);
 			}
 			else {
 				gotoxy(65, 25);
-				kolor_txt(4);
-				cout << "Najpierw stwórz postać...";
+				cout << "Brak zapisu gry";
 				ctrl = false;
-				break;
 			}
+			break;
 		case 0:
 			ctrl = true;
 			break;
@@ -565,6 +593,7 @@ bool Scena_1(Postac &player)
 									pak();
 									break;
 								case 0:
+									player.save();
 									ctrl = true;
 									break;
 								default:
@@ -584,6 +613,7 @@ bool Scena_1(Postac &player)
 							ctrl = true;
 							break;
 						case 0:
+							player.save();
 							ctrl = true;
 							break;
 						default:
@@ -591,6 +621,7 @@ bool Scena_1(Postac &player)
 						}
 					}while (ctrl == false);
 				case 0:
+					player.save();
 					ctrl = true;
 					break;
 				default:
@@ -689,6 +720,7 @@ bool Scena_1(Postac &player)
 							pak();
 							break;
 						case 0:
+							player.save();
 							ctrl = true;
 							break;
 						default:
@@ -708,6 +740,7 @@ bool Scena_1(Postac &player)
 					ctrl = true;
 					break;
 				case 0:
+					player.save();
 					ctrl = true;
 					break;
 				default:
@@ -716,6 +749,7 @@ bool Scena_1(Postac &player)
 			} while (ctrl == false);
 			break;
 		case 0:
+			player.save();
 			ctrl = true;
 			break;
 		default:
@@ -766,6 +800,8 @@ bool Scena_3(Postac& player)
 	kolor_txt(15);
 	gotoxy(20, 19);
 	cout << " Mając wiedzę o tajemnych przejściach stajesz przed mostem na krąg siódmy.";
+	player.last_scn = 3;
+	player.save();
 	pak();
 	return true;
 }
