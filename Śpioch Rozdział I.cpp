@@ -22,7 +22,7 @@ public:
 	bool aktywnaP = false;
 	bool gyce_talk = false;
 	int Hidden_Path = 0, last_scn = 0;
-	string name;
+	const string name = "Bin";
 	string data, czas;
 	fstream myfile;
 	int randattr()
@@ -39,7 +39,7 @@ public:
 		SYSTEMTIME lt = { 0 };
 		GetLocalTime(&lt);
 		fstream myfile;
-		myfile.open("save1.sfs");
+		myfile.open("save1.sfs", std::ofstream::out | std::ofstream::trunc);
 		myfile << lt.wHour << ":" << lt.wMinute << " " << lt.wDay << "." << lt.wMonth << "." << lt.wYear << " " << Hidden_Path << " " << last_scn;
 		myfile.close();
 	}
@@ -67,15 +67,16 @@ void okno_rozmiar();
 void kolor_txt(int color);
 void ClearScreen();
 void gotoxy(short x, short y);
-//bool Dane_postaci(Postac& player);
 int inpt();
 bool zla_opcja();
+
 //Główne okna
 void Title();
 void menu();
 bool info();
 bool NowaGra();
 void pak();
+
 //Fabuła
 void wstep();
 bool Scena_1(Postac& player);
@@ -147,14 +148,6 @@ void gotoxy(short x, short y) {
 	SetConsoleCursorPosition(Console, pos);
 }
 
-// wywołanie danych postaci
-/*bool Dane_postaci(Postac& player)
-{
-	kolor_txt(9);
-	player.Postac_stat();
-	kolor_txt(15);
-	return false;
-}*/
 
 //Wprowadzanie opcji
 int inpt()
@@ -333,7 +326,7 @@ bool NowaGra()
 	ClearScreen();
 	int NowaGra = 0;
 	bool ctrl = true;
-	Postac player;
+	
 	gotoxy(65, 14);
 	cout << "#========================#";
 	gotoxy(65, 15);
@@ -349,6 +342,7 @@ bool NowaGra()
 	gotoxy(65, 20);
 	cout << "#========================#";
 	do {
+		Postac player;
 		NowaGra = inpt();
 		switch (NowaGra) {
 		case 1:
@@ -419,7 +413,7 @@ void pak()
 void delay_txt(string text)
 {
 	size_t lng = text.length();
-	for (int i = 0; i < lng; i++) {
+	for (int i = 0; i <= lng; i++) {
 		cout << text[i];
 		Sleep(50);
 	}
@@ -580,6 +574,7 @@ bool Scena_1(Postac &player)
 									cout << "Z czasem żal za utraconym powoduje, że nie widząc sensu dalszej egzystencji, ";
 									gotoxy(50, 21);
 									cout << "odchodzisz poza Oktawię i giniesz na pustkowiach.";
+									player.Hidden_Path = 0;
 									pak();
 									break;
 								case 3:
@@ -590,6 +585,7 @@ bool Scena_1(Postac &player)
 									cout << "Ten zatoczył się, potknął i nieszczęśliwie zsunął się w głąb kanału.";
 									gotoxy(50, 21);
 									cout << "Ostatnim wymachem ręki, łapię za nogawkę twoich spodni i spadacie obaj w objęcia śmierci.";
+									player.Hidden_Path = 0;
 									pak();
 									break;
 								case 0:
@@ -707,6 +703,7 @@ bool Scena_1(Postac &player)
 							cout << "Z czasem żal za utraconym powoduje, że nie widząc sensu dalszej egzystencji, ";
 							gotoxy(50, 21);
 							cout << "odchodzisz poza Oktawię i giniesz na pustkowiach.";
+							player.Hidden_Path = 0;
 							pak();
 							break;
 						case 3:
@@ -717,6 +714,7 @@ bool Scena_1(Postac &player)
 							cout << "Ten zatoczył się, potknął i nieszczęśliwie zsunął się w głąb kanału.";
 							gotoxy(50, 21);
 							cout << "Ostatnim wymachem ręki, łapię za nogawkę twoich spodni i spadacie obaj w objęcia śmierci.";
+							player.Hidden_Path = 0;
 							pak();
 							break;
 						case 0:
