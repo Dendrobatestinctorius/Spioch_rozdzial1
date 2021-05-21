@@ -141,6 +141,9 @@
   <ItemGroup>
     <ClCompile Include="Śpioch Rozdział I.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="save1.sfs" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -194,14 +194,12 @@ bool zla_opcja()
 //Powitanie
 void Title()
 {
-	const string studio = "Dendrobates Studio";
-	const string pres = "Przedstawia:";
 	gotoxy(65, 19);
 	kolor_txt(2);
-	delay_txt(studio);
+	delay_txt("Dendrobates Studio");
 	gotoxy(68, 22);
 	Sleep(1000);
-	delay_txt(pres);
+	delay_txt("Przedstawia:");
 	Sleep(1500);
 	ClearScreen();
 	gotoxy(48, 10);
