@@ -195,6 +195,7 @@ void Title()
 	grp.printdb("Dendrobates Studio", true, 65, 19, 2);
 	Sleep(1000);
 	grp.printdb("Przedstawia:", true, 68, 22, 2);
+	Sleep(1000);
 	Sleep(1500);
 	grp.ClearScreen();
 	grp.printdb("    _", false, 48, 10, 11);
