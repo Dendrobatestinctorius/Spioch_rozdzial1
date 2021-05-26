@@ -214,7 +214,7 @@ void Title()
 	grp.printdb("#   #   #    #   #    #    #   #    # ###### #/         #  ", false, 48, 24, 11);
 	grp.printdb("#    #  #    #  #     #    #  #     # #    # #          #  ", false, 48, 25, 11);
 	grp.printdb("#     #  ####  ###### #####  ###### # #    # ######    ### ", false, 48, 26, 11);
-	grp.printdb("Gra Fabularna na podstawie prozy ", true, 55, 28, 16);
+	grp.printdb("Gra Fabularna na podstawie prozy ", true, 55, 28, 15);
 	grp.printdb("Dawida Wąsowicza.", true, 89, 28, 9);
 	grp.pak();
 }
@@ -248,7 +248,7 @@ void menu()
 				ctrl = NowaGra();
 				break;
 			case 9:
-				ctrl = info();
+				info();
 				break;
 			case 0:
 				ctrl = true;
@@ -260,7 +260,7 @@ void menu()
 	} while (menuchoice != 0);
 }
 
-bool info()
+void info()
 {
 	grp.ClearScreen();
 	grp.printdb("Śpioch Rozdział I. Gra fabularna v0.0.1", false, 53, 15, 15);
@@ -270,7 +270,6 @@ bool info()
 	grp.printdb("Sterowanie jest proste, poprzez podanie cyfry odpowiadającej wyborowi", false, 53, 21, 15);
 	grp.pak();
 	grp.ClearScreen();
-	return true;
 }
 
 bool NowaGra()
