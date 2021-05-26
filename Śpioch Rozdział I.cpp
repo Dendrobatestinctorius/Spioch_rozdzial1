@@ -127,7 +127,7 @@ bool zla_opcja();
 //Główne okna
 void Title();
 void menu();
-bool info();
+void info();
 bool NowaGra();
 
 //Fabuła
